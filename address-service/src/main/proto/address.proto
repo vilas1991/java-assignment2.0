@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package com.webapp.backend.grpc;
+
+service AddressService {
+  rpc CreateAddress (CreateAddressRequest) returns (AddressResponse) {}
+  rpc GetAddress (GetAddressRequest) returns (AddressResponse) {}
+
+}
+
+message CreateAddressRequest {
+  string addressLineFirst = 1;
+  string addressLineSecond = 2;
+  string postalCode = 3;
+}
+
+message AddressResponse {
+   int64 addressId = 1;
+  string addressLineFirst = 2;
+  string addressLineSecond = 3;
+  string postalCode = 4;
+}
+
+
+
+message GetAddressRequest {
+  int64 addressId = 1;
+}

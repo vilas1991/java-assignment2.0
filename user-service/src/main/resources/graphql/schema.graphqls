@@ -1,0 +1,26 @@
+
+schema{
+    query:Query
+}
+
+type Query{
+    getUser(userId: Int): User
+    getAllUser: [User]
+}
+type User{
+    id:Int
+    firstName:String
+    lastName:String
+    dob:String
+    phoneNumber:String
+    valid:String
+    role:String
+    addressResponse:AddressResponse
+}
+
+type AddressResponse{
+    addressId:Int
+    addressLineFirst:String
+    addressLineSecond:String
+    postalCode:String
+}

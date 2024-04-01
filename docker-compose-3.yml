@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  # frontend:
+    # build:
+      # context: ./frontend
+      # dockerfile: Dockerfile
+    # ports:
+      # - "3000:3000"
+    # depends_on:
+      # - userservice
+      # - addressservice
+      # - eurekaserver
+
+  userservice:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+    networks:
+      Appplication-1: 
+    depends_on:
+      - database
+      - eurekaserver
+    environment:
+       MYSQL_ROOT_PASSWORD : "root"
+  addressservice:
+    build:
+      context: ./address-service
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    networks:
+      Appplication-1: 
+    depends_on:
+      - database
+      - eurekaserver
+    environment:
+      MYSQL_ROOT_PASSWORD : "root"
+      SPRING_DATASOURCE_URL: jdbc:mysql://database:3310/addressdb?useSSL=false
+
+  eurekaserver:
+    build:
+      context: ./eureka-server
+      dockerfile: Dockerfile
+    ports:
+      - "8761:8761"
+    networks:
+      Appplication-1:         
+    environment:
+      SERVER_PORT : "8761"
+      PRING_APPLICATION_NAME : eureka-server
+
+  database:
+    image: mysql
+    container_name: database
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABSE: mydb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user
+    ports:
+      - "3310:3306"
+    networks:
+      Appplication-1:    
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      
+      
+networks:
+  Appplication-1: 
